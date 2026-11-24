@@ -126,3 +126,7 @@ tests/                    unit tests
 The Indian Express, Express Special: *India's Highway Ghost Cars: How Vehicles Are Evading The New FASTag Toll System*
 (video: https://youtu.be/10NSrXwels0), and reports by Dheeraj Mishra, 10 and 21 November 2026.
 All real-world figures here come from them.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
