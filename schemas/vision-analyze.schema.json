@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Vision answer (POST /v1/analyze). Planned, not built.",
+  "type": "object",
+  "required": ["plate_status", "confidence", "fingerprint", "embedding"],
+  "additionalProperties": false,
+  "properties": {
+    "plate_status": {"enum": ["readable", "obstructed_deliberate", "damaged", "missing", "glare_weather"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "evidence": {"type": "string", "description": "One sentence. Never a guess at the plate text."},
+    "fingerprint": {
+      "type": "object",
+      "required": ["make", "model", "colour", "body"],
+      "properties": {
+        "make": {"type": "string"}, "model": {"type": "string"}, "colour": {"type": "string"}, "body": {"type": "string"},
+        "axles": {"type": ["integer", "null"]},
+        "marks": {"type": "array", "maxItems": 5, "items": {"type": "string"}},
+        "field_confidence": {"type": "object", "additionalProperties": {"type": "number"}}
+      }
+    },
+    "embedding": {"type": "array", "items": {"type": "number"}, "minItems": 8}
+  }
+}

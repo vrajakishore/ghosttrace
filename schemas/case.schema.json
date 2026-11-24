@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Case detail (GET /api/cases/{case_id})",
+  "type": "object",
+  "required": ["case_id", "decision", "settings", "ghost", "candidates", "evidence_pack"],
+  "properties": {
+    "case_id": {"type": "integer"},
+    "decision": {"enum": ["recommend", "review", "unresolved"]},
+    "top_vrn": {"type": ["string", "null"]},
+    "n_candidates": {"type": "integer", "minimum": 0},
+    "settings": {
+      "type": "object",
+      "required": ["preset", "window", "threshold", "margin"],
+      "properties": {"preset": {"enum": ["optimistic", "central", "pessimistic"]},
+                     "window": {"type": "number"}, "threshold": {"type": "number"}, "margin": {"type": "number"}}
+    },
+    "ghost": {
+      "type": "object",
+      "required": ["plaza_id", "time", "direction", "plate_status", "observed"],
+      "properties": {
+        "plaza_id": {"type": "string"}, "time": {"type": "string", "pattern": "^Day \\d+, \\d{2}:\\d{2}$"},
+        "direction": {"type": "string"}, "speed_class": {"enum": ["car", "lcv", "truck"]},
+        "plate_status": {"enum": ["readable", "obstructed_deliberate", "damaged", "missing", "glare_weather"]},
+        "observed": {"$ref": "#/$defs/description"}
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["vrn", "plaza_id", "time", "travel_minutes", "offset_minutes", "image_similarity", "in_window", "passes", "registered"],
+        "properties": {
+          "vrn": {"type": "string", "pattern": "^XX\\d{2}[A-Z]{2}\\d{6}$"},
+          "plaza_id": {"type": "string"}, "time": {"type": "string"},
+          "travel_minutes": {"type": "number"}, "offset_minutes": {"type": "number"},
+          "image_similarity": {"type": "number", "minimum": -1, "maximum": 1},
+          "in_window": {"type": "boolean"}, "passes": {"type": "boolean"},
+          "registered": {"$ref": "#/$defs/description"}
+        }
+      }
+    },
+    "evidence_pack": {"$ref": "evidence-pack.schema.json"},
+    "review": {"type": ["object", "null"]}
+  },
+  "$defs": {
+    "description": {
+      "type": "object",
+      "required": ["make", "model", "colour", "body"],
+      "properties": {"make": {"type": "string"}, "model": {"type": "string"}, "colour": {"type": "string"}, "body": {"type": "string"}}
+    }
+  }
+}

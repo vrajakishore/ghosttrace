@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GhostTrace match explanation (agent answer). Simulated data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["decision", "named_vrn", "summary", "reasons", "reviewer_checks", "honest_failure_possible", "notice"],
+  "properties": {
+    "decision": {"type": "string", "enum": ["recommend", "review", "unresolved"]},
+    "named_vrn": {"type": ["string", "null"]},
+    "summary": {"type": "string"},
+    "reasons": {"type": "array", "items": {"type": "string"}},
+    "reviewer_checks": {"type": "array", "items": {"type": "string"}},
+    "honest_failure_possible": {"type": "boolean"},
+    "notice": {"type": "string", "enum": ["Simulated data. Recommendation for human review only; not a penalty."]}
+  }
+}

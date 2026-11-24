@@ -1,0 +1,4 @@
+openai>=1.106.0
+azure-identity
+azure-ai-projects==2.11.0
+jsonschema

@@ -1,0 +1,45 @@
+{
+  "seed": 20261124,
+  "plazas": [
+    {"id": "L1", "type": "legacy", "km": 0,   "name": "Legacy plaza L1"},
+    {"id": "M1", "type": "mlff",   "km": 45,  "name": "MLFF gantry M1"},
+    {"id": "M2", "type": "mlff",   "km": 110, "name": "MLFF gantry M2"},
+    {"id": "M3", "type": "mlff",   "km": 170, "name": "MLFF gantry M3"},
+    {"id": "L2", "type": "legacy", "km": 215, "name": "Legacy plaza L2"}
+  ],
+  "nodes_km": [-10, 22, 78, 140, 192, 225],
+  "traffic": {
+    "vehicles_per_day": 27000,
+    "days": 4,
+    "trip_mix": {"through": 0.40, "one_legacy": 0.40, "no_legacy": 0.20},
+    "hourly_profile": [1.0, 0.8, 0.7, 0.7, 0.9, 1.4, 2.2, 3.2, 3.8, 3.9, 3.7, 3.5,
+                       3.4, 3.4, 3.5, 3.7, 4.0, 4.2, 4.0, 3.4, 2.7, 2.1, 1.6, 1.2],
+    "speed_kmph": {"car": [70, 110], "lcv": [55, 90], "truck": [40, 75]},
+    "stop_probability_per_leg": 0.06,
+    "stop_minutes": [10, 40],
+    "legacy_identified_rate": 0.97,
+    "evader_legacy_identified_rate": 0.90
+  },
+  "evasion": {
+    "ghost_share": 0.03,
+    "honest_failure_share": 0.20,
+    "plate_status_mix": {"obstructed_deliberate": 0.75, "missing": 0.125, "damaged": 0.125}
+  },
+  "camera": {
+    "p_model_wrong": 0.10,
+    "p_colour_wrong": 0.08,
+    "p_body_wrong": 0.02,
+    "embedding_dim": 32,
+    "presets": {
+      "optimistic":  {"lookalike_cos": 0.35, "noise": 0.35},
+      "central":     {"lookalike_cos": 0.50, "noise": 0.50},
+      "pessimistic": {"lookalike_cos": 0.70, "noise": 0.75}
+    }
+  },
+  "matching": {
+    "reported_window_minutes": 10,
+    "max_window_minutes": 60,
+    "max_review_candidates": 5,
+    "target_precision": 0.99
+  }
+}

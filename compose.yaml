@@ -1,0 +1,30 @@
+# docker compose up --build      or podman compose up --build; then open http://localhost:8080
+# The first start simulates the traffic and runs the matching engine (about a minute).
+# Later starts reuse the data in the named volume. Rebuild the data: docker compose down -v (or podman compose down -v)
+name: ghosttrace
+
+services:
+  pipeline:                       # job: simulate -> match -> tune -> decide -> report, then exit
+    build: .
+    image: ghosttrace:prototype
+    command: ["python", "-m", "services.pipeline"]
+    environment:
+      GT_DAYS: "${GT_DAYS:-4}"
+    volumes:
+      - ghosttrace-data:/data
+
+  app:                            # service: API + web app
+    image: ghosttrace:prototype
+    build: .
+    command: ["python", "-m", "services.api"]
+    ports:
+      - "${GT_PORT:-8080}:8080"
+    volumes:
+      - ghosttrace-data:/data
+    depends_on:
+      pipeline:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  ghosttrace-data: {}

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GhostTrace prototype</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>GhostTrace <span class="ver">prototype v0</span></h1>
+    <p class="sub">Can a vehicle that hides its number plate at a barrier-less toll be named from other toll data?</p>
+  </div>
+  <div class="badge" role="note">SIMULATED DATA<br><span>Fictional corridor. No real vehicles. Synthetic camera frames only.</span></div>
+</header>
+
+<nav role="tablist" aria-label="Screens">
+  <button role="tab" aria-selected="true" data-tab="replay">1 · Corridor replay</button>
+  <button role="tab" aria-selected="false" data-tab="cases">2 · Case file</button>
+  <button role="tab" aria-selected="false" data-tab="dial">3 · Reliability dial</button>
+  <button role="tab" aria-selected="false" data-tab="desk">4 · Reviewer desk</button>
+</nav>
+
+<main>
+<section id="replay" class="tab">
+  <div class="controls">
+    <label>Day <select id="rDay"><option>2</option><option>3</option><option>4</option></select></label>
+    <label>Start <select id="rHour"></select></label>
+    <label>Speed <select id="rSpeed"><option value="60">60×</option><option value="120" selected>120×</option><option value="300">300×</option></select></label>
+    <button id="rPlay" type="button" class="primary">Play</button>
+    <button id="rReset" type="button">Restart</button>
+    <span id="rClock" class="clock" aria-live="off"></span>
+  </div>
+  <canvas id="road" height="250" aria-label="Animated schematic of a toll corridor with five toll points"></canvas>
+  <div class="legend">
+    <span><i class="dot grey"></i>Identified vehicle</span>
+    <span><i class="dot red"></i>Ghost: crossed a gantry unidentified</span>
+    <span><i class="line green"></i>Engine named one vehicle (for human review)</span>
+    <span><i class="line amber"></i>Several plausible vehicles</span>
+  </div>
+  <div class="counters" aria-live="polite">
+    <div><b id="cCross">0</b><span>gantry crossings</span></div>
+    <div><b id="cGhost" class="red">0</b><span>ghost crossings</span></div>
+    <div><b id="cRec" class="green">0</b><span>named for review</span></div>
+    <div><b id="cRev" class="amber">0</b><span>several candidates</span></div>
+    <div><b id="cUnr">0</b><span>unresolved</span></div>
+  </div>
+  <h3>Latest ghost crossings <small>(select one to open its case file)</small></h3>
+  <div id="feed" class="feed"></div>
+</section>
+
+<section id="cases" class="tab" hidden>
+  <div class="split">
+    <div class="list">
+      <div class="controls">
+        <label>Show <select id="cFilter">
+          <option value="recommend">Named for review</option><option value="review">Several candidates</option>
+          <option value="unresolved">Unresolved</option><option value="">All</option></select></label>
+        <span id="cTotal" class="muted"></span>
+      </div>
+      <div id="cList" class="rows"></div>
+    </div>
+    <div id="cDetail" class="detail"><p class="muted">Select a case.</p></div>
+  </div>
+</section>
+
+<section id="dial" class="tab" hidden>
+  <div class="split">
+    <div class="panel">
+      <fieldset><legend>Method</legend>
+        <label><input type="radio" name="method" value="reported"> Reported method: time window + make, model, colour at the nearest legacy plaza</label>
+        <label><input type="radio" name="method" value="full" checked> Full method: adds an image-similarity check, searches both legacy plazas</label>
+      </fieldset>
+      <label for="dWindow">Time window: <b id="dWindowV"></b> minutes</label>
+      <input id="dWindow" type="range" min="0" max="5" step="1">
+      <label for="dThr">Image similarity threshold: <b id="dThrV"></b></label>
+      <input id="dThr" type="range" min="0.30" max="0.95" step="0.05">
+      <label for="dPreset">Assumed image quality</label>
+      <select id="dPreset"></select>
+      <p id="dPresetNote" class="muted"></p>
+      <button id="dTuned" type="button">Use the setting tuned on day 1</button>
+    </div>
+    <div class="panel" aria-live="polite">
+      <div class="big">
+        <div><b id="dPrec">–</b><span>of named vehicles are the right vehicle</span><small id="dCi"></small></div>
+        <div><b id="dRes">–</b><span>of ghosts that reached a legacy plaza are correctly named</span><small id="dResN"></small></div>
+      </div>
+      <div id="dBar" class="bar" role="img"></div>
+      <div id="dBarKey" class="legend"></div>
+      <svg id="dChart" viewBox="0 0 560 252" role="img" aria-label="Precision and resolution chart"></svg>
+      <p class="muted">Measured on simulated days 2 to 4. A named vehicle is a recommendation for a human reviewer, never a penalty.</p>
+    </div>
+  </div>
+</section>
+
+<section id="desk" class="tab" hidden>
+  <div class="split">
+    <div class="list">
+      <div class="controls"><b>Queue: named for review</b> <button id="kRefresh" type="button">Refresh</button></div>
+      <div id="kList" class="rows"></div>
+    </div>
+    <div id="kDetail" class="detail"><p class="muted">Select a case from the queue.</p></div>
+  </div>
+  <h3>Audit log</h3>
+  <div id="kAudit" class="rows audit"></div>
+</section>
+</main>
+<footer>GhostTrace prototype v0 · simulated data · a named vehicle is a recommendation for a human reviewer, not a penalty.</footer>
+<script src="app.js"></script>
+</body>
+</html>
